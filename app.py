@@ -113,7 +113,7 @@ hide_streamlit_style = """
             padding: 50px;
         }
         ._terminalButton_rix23_138{
-            display: none;
+            display: none !important;
         }
     </style>
 """
