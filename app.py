@@ -159,17 +159,17 @@ if st.session_state.mapping_loaded:
 if st.session_state.mapping_loaded and input_files:
     st.subheader("🚀 3. Process Files")
     
-    if not st.session_state.output_ready:
-        if st.button("Replace IDs and Generate Output", disabled=st.session_state.processing):
-            st.session_state.processing = True
+    # if not st.session_state.output_ready:
+    if st.button("Replace IDs and Generate Output", disabled=st.session_state.processing):
+        st.session_state.processing = True
+        
+        with st.spinner("⏳ Processing files... This may take a while..."):
+            output_zip = process_files(input_files)
+            st.session_state.output_zip = output_zip
+            st.session_state.output_ready = True
+            st.session_state.processing = False
             
-            with st.spinner("⏳ Processing files... This may take a while..."):
-                output_zip = process_files(input_files)
-                st.session_state.output_zip = output_zip
-                st.session_state.output_ready = True
-                st.session_state.processing = False
-                
-            st.success("Files processed successfully!", icon="✅")
+        st.success("Files processed successfully!", icon="✅")
 
     if st.session_state.output_ready:
         st.download_button(
