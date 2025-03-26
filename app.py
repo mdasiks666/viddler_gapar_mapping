@@ -112,7 +112,7 @@ hide_streamlit_style = """
         .stMainBlockContainer {
             padding: 50px;
         }
-        ._terminalButton_rix23_138{
+        ._terminalButton_rix23_138, [data-testid="manage-app-button"]{
             display: none !important;
         }
     </style>
