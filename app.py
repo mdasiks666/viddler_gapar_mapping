@@ -104,19 +104,19 @@ def update_media_id(media_id):
     return "ID Not Found"
 
 
-# hide_streamlit_style = """
-#     <style>
-#         .stAppHeader {
-#             display: none;
-#         }     
-#         .stMainBlockContainer {
-#             padding: 50px;
-#         }
-#     </style>
-# """
+hide_streamlit_style = """
+    <style>
+        .stAppHeader {
+            display: none;
+        }     
+        .stMainBlockContainer {
+            padding: 50px;
+        }
+    </style>
+"""
 
 st.set_page_config(page_title="Viddler to Gaspar Mapping", layout="wide")
-# st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 st.title("Viddler to Gaspar Mapping Tool")
 st.write("Upload a mapping Excel file and input directory to begin processing files.")
