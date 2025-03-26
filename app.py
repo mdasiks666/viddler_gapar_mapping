@@ -112,6 +112,9 @@ hide_streamlit_style = """
         .stMainBlockContainer {
             padding: 50px;
         }
+        ._terminalButton_rix23_138{
+            display: none;
+        }
     </style>
 """
 
