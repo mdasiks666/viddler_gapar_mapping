@@ -1,0 +1,8 @@
+tkintertable
+customtkinter
+pandas
+pillow
+openpyxl
+tkinter-tooltip
+CTkMessagebox
+streamlit
