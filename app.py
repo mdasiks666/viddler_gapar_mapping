@@ -115,6 +115,9 @@ hide_streamlit_style = """
         ._terminalButton_rix23_138, [data-testid="manage-app-button"]{
             display: none !important;
         }
+        #MainMenu {
+            visibility: hidden;
+        }
     </style>
 """
 
