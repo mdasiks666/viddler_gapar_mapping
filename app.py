@@ -33,9 +33,12 @@ def process_files(files):
         for file in files:
             try:
                 if os.path.splitext(file.name)[1] == ".xlsx":
-                    data = pd.read_excel(file)
+                    check = pd.read_excel(file, header=None, dtype=str)
+                    header_row_index = check.notna().sum(axis=1).idxmax()
+                    data = pd.read_excel(file, header=header_row_index, dtype=str)
+                    data = data.dropna().reset_index(drop=True)
                     idf = pd.DataFrame(data).astype(str)
-
+                    
                     vid = [
                         item
                         for item in idf.columns.tolist()
@@ -159,7 +162,6 @@ if st.session_state.mapping_loaded:
 if st.session_state.mapping_loaded and input_files:
     st.subheader("🚀 3. Process Files")
     
-    # if not st.session_state.output_ready:
     if st.button("Replace IDs and Generate Output", disabled=st.session_state.processing):
         st.session_state.processing = True
         
