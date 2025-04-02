@@ -38,7 +38,7 @@ def process_files(files):
                     data = pd.read_excel(file, header=header_row_index, dtype=str)
                     data = data.dropna().reset_index(drop=True)
                     idf = pd.DataFrame(data).astype(str)
-
+                    
                     vid = [
                         item
                         for item in idf.columns.tolist()
@@ -109,6 +109,9 @@ def update_media_id(media_id):
 
 hide_streamlit_style = """
     <style>
+        .stAppHeader {
+            display: none;
+        }     
         .stMainBlockContainer {
             padding: 50px;
         }
