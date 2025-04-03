@@ -4,6 +4,7 @@ import re
 import os
 from io import BytesIO
 import zipfile
+import np
 
 if 'viddler_map' not in st.session_state:
     st.session_state.viddler_map = {}
@@ -35,9 +36,8 @@ def process_files(files):
                 if os.path.splitext(file.name)[1] == ".xlsx":
                     check = pd.read_excel(file, header=None, dtype=str)
                     header_row_index = check.notna().sum(axis=1).idxmax()
-                    data = pd.read_excel(file, header=header_row_index, dtype=str)
-                    data = data.dropna().reset_index(drop=True)
-                    idf = pd.DataFrame(data).astype(str)
+                    idf = pd.read_excel(file, header=header_row_index, dtype=str)
+                    idf = idf.fillna('')
                     
                     vid = [
                         item
@@ -72,6 +72,9 @@ def process_files(files):
 
                     idf = idf[columns]
                     output_buffer = BytesIO()
+                    pd.set_option('future.no_silent_downcasting', True)
+                    idf = idf.replace(['', None, np.nan, 'NA', 'null'], np.nan)
+                    idf = idf.dropna(how="all").reset_index(drop=True)
                     idf.to_excel(output_buffer, index=False)
                     zipf.writestr(f"{file.name}_updated.xlsx", output_buffer.getvalue())
 
@@ -81,18 +84,33 @@ def process_files(files):
     output_zip.seek(0)
     return output_zip
 
+def update_gaspar_id(self,viddler_id):
+    if str(viddler_id).find("viddler") > -1:
+        ids = re.findall(r'viddler-([a-z0-9]+)|embed/([a-z0-9]+)', viddler_id)
+        ids = [i for sub in ids for i in sub if i]
+        if len(ids):
+            viddlerid = ids[0]
+            if viddlerid in st.session_state.viddler_map:
+                return st.session_state.viddler_map[viddlerid]
+            return "ID Not Found"
+        else:
+            return ""
+    else:
+        if viddler_id:
+            if viddler_id in st.session_state.viddler_map:
+                return st.session_state.viddler_map[viddler_id]
+            return "ID Not Found"
+        else:
+            return ""
 
-def update_gaspar_id(viddler_id):
-    if viddler_id in st.session_state.viddler_map:
-        return st.session_state.viddler_map[viddler_id]
-    return "ID Not Found"
 
-
-def generate_embed_code(gaspar_id):
-    if gaspar_id != "ID Not Found":
-        return f"""<iframe frameborder='0' style='width:640px; height:480px;' src='https://media.gaspar.mheducation.com/GASPARPlayer/play.html?id={gaspar_id}' allowfullscreen></iframe>"""
-    return "ID Not Found"
-
+def generate_embed_code(self,gaspar_id):
+        if len(gaspar_id):
+            if gaspar_id != "ID Not Found":
+                return f"""<iframe frameborder='0' style='width:640px; height:480px;' src='https://media.gaspar.mheducation.com/GASPARPlayer/play.html?id={gaspar_id}' allowfullscreen></iframe>"""
+            return "ID Not Found"
+        else:
+            return ""
 
 def update_media_id(media_id):
     match = re.search(r"_viddler_([a-z0-9]+)_", media_id)
