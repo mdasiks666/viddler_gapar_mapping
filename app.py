@@ -4,7 +4,7 @@ import re
 import os
 from io import BytesIO
 import zipfile
-import np
+import numpy as np
 
 if 'viddler_map' not in st.session_state:
     st.session_state.viddler_map = {}
